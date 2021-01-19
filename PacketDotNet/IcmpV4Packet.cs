@@ -148,6 +148,55 @@ namespace PacketDotNet
             }
         }
 
+        /// <summary>Check if the ICMP packet is valid, checksum-wise.</summary>
+        public bool ValidChecksum => ValidIcmpChecksum;
+
+        /// <summary>
+        /// Check if the ICMP packet is valid, checksum-wise.
+        /// </summary>
+        public bool ValidIcmpChecksum
+        {
+            get
+            {
+                Log.Debug("");
+
+                var calculatedChecksum = CalculateIcmpChecksum();
+
+                Log.DebugFormat(HexPrinter.GetString(Bytes, 0, Bytes.Length));
+
+                var result = Checksum == calculatedChecksum;
+
+                Log.DebugFormat("calculatedChecksum: {0}, Checksum {1}, returning {2}", calculatedChecksum, Checksum, result);
+
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// Calculates the ICMP checksum.
+        /// </summary>
+        /// <returns>The calculated ICMP checksum.</returns>
+        public ushort CalculateIcmpChecksum()
+        {
+            var originalChecksum = Checksum;
+
+            Checksum = 0; // This needs to be reset first to calculate the checksum.
+
+            var calculatedChecksum = ChecksumUtils.OnesComplementSum(Bytes, 0, Bytes.Length);
+
+            Checksum = originalChecksum;
+
+            return (ushort)calculatedChecksum;
+        }
+
+        /// <summary>
+        /// Update the checksum value.
+        /// </summary>
+        public void UpdateIcmpChecksum()
+        {
+            Checksum = CalculateIcmpChecksum();
+        }
+
         /// <summary cref="Packet.ToString(StringOutputType)" />
         public override string ToString(StringOutputType outputFormat)
         {
