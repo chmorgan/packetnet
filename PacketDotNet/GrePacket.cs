@@ -60,13 +60,13 @@ namespace PacketDotNet
         /// <summary>Fetch ascii escape sequence of the color associated with this packet type.</summary>
         public override string Color => AnsiEscapeSequences.DarkGray;
 
-        public bool HasCheckSum => 8 == (Header.Bytes[Header.Offset + 1] & 0x8);
+        public bool HasCheckSum => 0x80 == (Header.Bytes[Header.Offset + 0] & 0x80);
 
-        public bool HasKey => 2 == (Header.Bytes[Header.Offset + 1] & 0x2);
+        public bool HasKey => 0x20 == (Header.Bytes[Header.Offset + 0] & 0x20);
 
-        public bool HasReserved => 4 == (Header.Bytes[Header.Offset + 1] & 0x4);
+        public bool HasReserved => false; // Reserved bits so currently not used
 
-        public bool HasSequence => 1 == (Header.Bytes[Header.Offset + 1] & 0x1);
+        public bool HasSequence => 0x10 == (Header.Bytes[Header.Offset + 0] & 0x10);
 
         public EthernetType Protocol => (EthernetType) EndianBitConverter.Big.ToUInt16(Header.Bytes,
                                                                                        Header.Offset + GreFields.FlagsLength);
