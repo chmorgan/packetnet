@@ -28,9 +28,11 @@ namespace Test.PacketType
             var dev = new CaptureFileReaderDevice(NUnitSetupClass.CaptureDirectory + "dhcp.pcap");
             dev.Open();
 
-            RawCapture rawCapture;
-            while ((rawCapture = dev.GetNextPacket()) != null)
+            PacketCapture c;
+            GetPacketStatus status;
+            while ((status = dev.GetNextPacket(out c)) == GetPacketStatus.PacketRead)
             {
+                var rawCapture = c.GetPacket();
                 var p = Packet.ParsePacket(rawCapture.GetLinkLayers(), rawCapture.Data);
                 Console.WriteLine("Converted a raw packet to a Packet");
                 Console.WriteLine(p.ToString());
@@ -47,9 +49,11 @@ namespace Test.PacketType
             var dev = new CaptureFileReaderDevice(NUnitSetupClass.CaptureDirectory + "dhcp.pcap");
             dev.Open();
 
-            RawCapture rawCapture;
-            if ((rawCapture = dev.GetNextPacket()) != null)
+            PacketCapture c;
+            GetPacketStatus status;
+            if ((status = dev.GetNextPacket(out c)) == GetPacketStatus.PacketRead)
             {
+                var rawCapture = c.GetPacket();
                 var p = Packet.ParsePacket(rawCapture.GetLinkLayers(), rawCapture.Data);
                 Console.WriteLine("Converted a raw packet to a Packet");
                 Console.WriteLine(p.ToString());

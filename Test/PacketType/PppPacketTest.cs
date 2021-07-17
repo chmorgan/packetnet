@@ -26,8 +26,10 @@ namespace Test.PacketType
             var dev = new CaptureFileReaderDevice(NUnitSetupClass.CaptureDirectory + "PPPoEPPP.pcap");
             dev.Open();
             Console.WriteLine("Reading packet data");
-            dev.GetNextPacket();
-            var rawCapture = dev.GetNextPacket();
+            PacketCapture c;
+            dev.GetNextPacket(out c);
+            dev.GetNextPacket(out c);
+            var rawCapture = c.GetPacket();
             dev.Close();
             var p = Packet.ParsePacket(rawCapture.GetLinkLayers(), rawCapture.Data);
 
@@ -45,8 +47,10 @@ namespace Test.PacketType
             var dev = new CaptureFileReaderDevice(NUnitSetupClass.CaptureDirectory + "PPPoEPPP.pcap");
             dev.Open();
             Console.WriteLine("Reading packet data");
-            dev.GetNextPacket();
-            var rawCapture = dev.GetNextPacket();
+            PacketCapture c;
+            dev.GetNextPacket(out c);
+            dev.GetNextPacket(out c);
+            var rawCapture = c.GetPacket();
             dev.Close();
             var p = Packet.ParsePacket(rawCapture.GetLinkLayers(), rawCapture.Data);
 

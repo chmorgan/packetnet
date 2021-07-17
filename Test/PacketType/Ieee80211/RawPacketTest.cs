@@ -8,6 +8,7 @@ file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 using NUnit.Framework;
 using PacketDotNet;
+using SharpPcap;
 using SharpPcap.LibPcap;
 
 namespace Test.PacketType.Ieee80211
@@ -20,7 +21,9 @@ namespace Test.PacketType.Ieee80211
         {
             var dev = new CaptureFileReaderDevice(NUnitSetupClass.CaptureDirectory + "80211_raw_with_fcs.pcap");
             dev.Open();
-            var rawCapture = dev.GetNextPacket();
+            PacketCapture c;
+            dev.GetNextPacket(out c);
+            var rawCapture = c.GetPacket();
             dev.Close();
 
             var p = Packet.ParsePacket(rawCapture.GetLinkLayers(), rawCapture.Data);
@@ -33,7 +36,9 @@ namespace Test.PacketType.Ieee80211
         {
             var dev = new CaptureFileReaderDevice(NUnitSetupClass.CaptureDirectory + "80211_raw_without_fcs.pcap");
             dev.Open();
-            var rawCapture = dev.GetNextPacket();
+            PacketCapture c;
+            dev.GetNextPacket(out c);
+            var rawCapture = c.GetPacket();
             dev.Close();
 
             var p = Packet.ParsePacket(rawCapture.GetLinkLayers(), rawCapture.Data);

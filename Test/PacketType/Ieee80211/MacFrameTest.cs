@@ -30,7 +30,9 @@ namespace Test.PacketType.Ieee80211
         {
             var dev = new CaptureFileReaderDevice(NUnitSetupClass.CaptureDirectory + "80211_association_request_frame.pcap");
             dev.Open();
-            var rawCapture = dev.GetNextPacket();
+            PacketCapture c;
+            dev.GetNextPacket(out c);
+            var rawCapture = c.GetPacket();
             dev.Close();
 
             // check that the fcs can be calculated correctly
@@ -49,7 +51,9 @@ namespace Test.PacketType.Ieee80211
         {
             var dev = new CaptureFileReaderDevice(NUnitSetupClass.CaptureDirectory + "80211_raw_with_fcs.pcap");
             dev.Open();
-            var rawCapture = dev.GetNextPacket();
+            PacketCapture c;
+            dev.GetNextPacket(out c);
+            var rawCapture = c.GetPacket();
             dev.Close();
 
             //For this test we are just going to ignore the radio packet that precedes the data frame
@@ -66,7 +70,9 @@ namespace Test.PacketType.Ieee80211
         {
             var dev = new CaptureFileReaderDevice(NUnitSetupClass.CaptureDirectory + "80211_raw_without_fcs.pcap");
             dev.Open();
-            var rawCapture = dev.GetNextPacket();
+            PacketCapture c;
+            dev.GetNextPacket(out c);
+            var rawCapture = c.GetPacket();
             dev.Close();
 
             //For this test we are just going to ignore the radio packet that precedes the data frame
@@ -137,7 +143,9 @@ namespace Test.PacketType.Ieee80211
         {
             var dev = new CaptureFileReaderDevice(NUnitSetupClass.CaptureDirectory + "80211_unencrypted_data_frame.pcap");
             dev.Open();
-            var rawCapture = dev.GetNextPacket();
+            PacketCapture c;
+            dev.GetNextPacket(out c);
+            var rawCapture = c.GetPacket();
             dev.Close();
 
             //For this test we are just going to ignore the radio packet that precedes the data frame
@@ -158,7 +166,9 @@ namespace Test.PacketType.Ieee80211
         {
             var dev = new CaptureFileReaderDevice(NUnitSetupClass.CaptureDirectory + "80211_unencrypted_data_frame.pcap");
             dev.Open();
-            var rawCapture = dev.GetNextPacket();
+            PacketCapture c;
+            dev.GetNextPacket(out c);
+            var rawCapture = c.GetPacket();
             dev.Close();
 
             //For this test we are just going to ignore the radio packet that precedes the data frame
@@ -182,9 +192,11 @@ namespace Test.PacketType.Ieee80211
 
             dev.Open();
 
-            RawCapture rawCapture;
-            while ((rawCapture = dev.GetNextPacket()) != null)
+            GetPacketStatus status;
+            PacketCapture c;
+            while ((status = dev.GetNextPacket(out c)) == GetPacketStatus.PacketRead)
             {
+                var rawCapture = c.GetPacket();
                 var p = Packet.ParsePacket(rawCapture.GetLinkLayers(), rawCapture.Data);
                 Assert.IsNotNull(p.PayloadPacket);
             }

@@ -91,10 +91,12 @@ namespace Test.PacketType
             var dev = new CaptureFileReaderDevice(NUnitSetupClass.CaptureDirectory + pcapPath);
             dev.Open();
 
-            RawCapture rawCapture;
+            PacketCapture e;
+            GetPacketStatus status;
             var packetIndex = 0;
-            while ((rawCapture = dev.GetNextPacket()) != null)
+            while ((status = dev.GetNextPacket(out e)) == GetPacketStatus.PacketRead)
             {
+                var rawCapture = e.GetPacket();
                 var p = Packet.ParsePacket(rawCapture.GetLinkLayers(), rawCapture.Data);
                 Console.WriteLine("got packet");
                 switch (packetIndex)
@@ -124,10 +126,12 @@ namespace Test.PacketType
             var dev = new CaptureFileReaderDevice(NUnitSetupClass.CaptureDirectory + pcapPath);
             dev.Open();
 
-            RawCapture rawCapture;
+            PacketCapture c;
+            GetPacketStatus status;
             var packetIndex = 0;
-            while ((rawCapture = dev.GetNextPacket()) != null)
+            while ((status = dev.GetNextPacket(out c)) == GetPacketStatus.PacketRead)
             {
+                var rawCapture = c.GetPacket();
                 var p = Packet.ParsePacket(rawCapture.GetLinkLayers(), rawCapture.Data);
                 switch (packetIndex)
                 {
@@ -167,7 +171,9 @@ namespace Test.PacketType
             var dev = new CaptureFileReaderDevice(NUnitSetupClass.CaptureDirectory + "ipv6_http.pcap");
             dev.Open();
             Console.WriteLine("Reading packet data");
-            var rawCapture = dev.GetNextPacket();
+            PacketCapture c;
+            dev.GetNextPacket(out c);
+            var rawCapture = c.GetPacket();
             var p = Packet.ParsePacket(rawCapture.GetLinkLayers(), rawCapture.Data);
 
             Console.WriteLine("Parsing");
@@ -184,7 +190,9 @@ namespace Test.PacketType
             var dev = new CaptureFileReaderDevice(NUnitSetupClass.CaptureDirectory + "ipv6_http.pcap");
             dev.Open();
             Console.WriteLine("Reading packet data");
-            var rawCapture = dev.GetNextPacket();
+            PacketCapture c;
+            dev.GetNextPacket(out c);
+            var rawCapture = c.GetPacket();
             var p = Packet.ParsePacket(rawCapture.GetLinkLayers(), rawCapture.Data);
 
             Console.WriteLine("Parsing");
@@ -226,9 +234,11 @@ namespace Test.PacketType
             };
 
             var packetIndex = 0;
-            RawCapture rawCapture;
-            while ((rawCapture = dev.GetNextPacket()) != null)
+            GetPacketStatus status;
+            PacketCapture c;
+            while ((status = dev.GetNextPacket(out c)) == GetPacketStatus.PacketRead)
             {
+                var rawCapture = c.GetPacket();
                 var p = Packet.ParsePacket(rawCapture.GetLinkLayers(), rawCapture.Data);
                 var t = p.Extract<TcpPacket>();
                 Assert.IsNotNull(t, "Expected t to not be null");

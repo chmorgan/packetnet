@@ -25,8 +25,11 @@ namespace Test.PacketType
             // Arrange
             var dev = new CaptureFileReaderDevice(NUnitSetupClass.CaptureDirectory + "udp-ip-fragmented.pcap");
             dev.Open();
-            var firstRawPacket = dev.GetNextPacket();
-            var secondRawPacket = dev.GetNextPacket();
+            PacketCapture c;
+            dev.GetNextPacket(out c);
+            var firstRawPacket = c.GetPacket();
+            dev.GetNextPacket(out c);
+            var secondRawPacket = c.GetPacket();
             dev.Close();
 
             // Act
@@ -47,7 +50,9 @@ namespace Test.PacketType
             // Arrange
             var dev = new CaptureFileReaderDevice(NUnitSetupClass.CaptureDirectory + "udp-ip-fragmented.pcap");
             dev.Open();
-            var firstRawPacket = dev.GetNextPacket();
+            PacketCapture c;
+            dev.GetNextPacket(out c);
+            var firstRawPacket = c.GetPacket();
             dev.Close();
 
             // Act
@@ -72,7 +77,9 @@ namespace Test.PacketType
         {
             var dev = new CaptureFileReaderDevice(NUnitSetupClass.CaptureDirectory + "tcp.pcap");
             dev.Open();
-            var rawCapture = dev.GetNextPacket();
+            PacketCapture c;
+            dev.GetNextPacket(out c);
+            var rawCapture = c.GetPacket();
             dev.Close();
 
             var p = Packet.ParsePacket(rawCapture.GetLinkLayers(), rawCapture.Data);

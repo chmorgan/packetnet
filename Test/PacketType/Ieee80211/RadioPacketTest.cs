@@ -11,6 +11,7 @@ using NUnit.Framework;
 using PacketDotNet;
 using PacketDotNet.Ieee80211;
 using PacketDotNet.Utils.Converters;
+using SharpPcap;
 using SharpPcap.LibPcap;
 
 namespace Test.PacketType.Ieee80211
@@ -70,7 +71,9 @@ namespace Test.PacketType.Ieee80211
         {
             var dev = new CaptureFileReaderDevice(NUnitSetupClass.CaptureDirectory + "80211_plus_radiotap_header.pcap");
             dev.Open();
-            var rawCapture = dev.GetNextPacket();
+            SharpPcap.PacketCapture c;
+            dev.GetNextPacket(out c);
+            var rawCapture = c.GetPacket();
             dev.Close();
 
             var p = Packet.ParsePacket(rawCapture.GetLinkLayers(), rawCapture.Data) as RadioPacket;
@@ -93,7 +96,9 @@ namespace Test.PacketType.Ieee80211
         {
             var dev = new CaptureFileReaderDevice(NUnitSetupClass.CaptureDirectory + "80211_radio_without_fcs.pcap");
             dev.Open();
-            var rawCapture = dev.GetNextPacket();
+            PacketCapture c;
+            dev.GetNextPacket(out c);
+            var rawCapture = c.GetPacket();
             dev.Close();
 
             var p = Packet.ParsePacket(rawCapture.GetLinkLayers(), rawCapture.Data) as RadioPacket;
@@ -143,7 +148,9 @@ namespace Test.PacketType.Ieee80211
         {
             var dev = new CaptureFileReaderDevice(NUnitSetupClass.CaptureDirectory + "80211_plus_radiotap_header.pcap");
             dev.Open();
-            var rawCapture = dev.GetNextPacket();
+            PacketCapture c;
+            dev.GetNextPacket(out c);
+            var rawCapture = c.GetPacket();
             dev.Close();
 
             var p = Packet.ParsePacket(rawCapture.GetLinkLayers(), rawCapture.Data) as RadioPacket;
@@ -186,7 +193,9 @@ namespace Test.PacketType.Ieee80211
         {
             var dev = new CaptureFileReaderDevice(NUnitSetupClass.CaptureDirectory + "80211_plus_radiotap_header.pcap");
             dev.Open();
-            var rawCapture = dev.GetNextPacket();
+            PacketCapture c;
+            dev.GetNextPacket(out c);
+            var rawCapture = c.GetPacket();
             dev.Close();
 
             var p = Packet.ParsePacket(rawCapture.GetLinkLayers(), rawCapture.Data) as RadioPacket;
@@ -213,7 +222,9 @@ namespace Test.PacketType.Ieee80211
             // radiotap packet
             var dev = new CaptureFileReaderDevice(NUnitSetupClass.CaptureDirectory + "80211_plus_radiotap_header.pcap");
             dev.Open();
-            var rawCapture = dev.GetNextPacket();
+            PacketCapture c;
+            dev.GetNextPacket(out c);
+            var rawCapture = c.GetPacket();
             dev.Close();
 
             var anotherRadioPacket = Packet.ParsePacket(rawCapture.GetLinkLayers(), rawCapture.Data) as RadioPacket;
@@ -248,7 +259,9 @@ namespace Test.PacketType.Ieee80211
             //Test for https://www.radiotap.org/#extended-presence-masks
             var dev = new CaptureFileReaderDevice(NUnitSetupClass.CaptureDirectory + "80211_radiotap_with_extended_presence_mask.pcap");
             dev.Open();
-            var rawCapture = dev.GetNextPacket();
+            PacketCapture c;
+            dev.GetNextPacket(out c);
+            var rawCapture = c.GetPacket();
             dev.Close();
 
             var p = Packet.ParsePacket(rawCapture.GetLinkLayers(), rawCapture.Data) as RadioPacket;

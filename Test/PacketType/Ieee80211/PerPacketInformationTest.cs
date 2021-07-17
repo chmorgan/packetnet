@@ -9,6 +9,7 @@ file, You can obtain one at https://mozilla.org/MPL/2.0/.
 using NUnit.Framework;
 using PacketDotNet;
 using PacketDotNet.Ieee80211;
+using SharpPcap;
 using SharpPcap.LibPcap;
 
 namespace Test.PacketType.Ieee80211
@@ -21,7 +22,9 @@ namespace Test.PacketType.Ieee80211
         {
             var dev = new CaptureFileReaderDevice(NUnitSetupClass.CaptureDirectory + "80211_ppi_multiplefields.pcap");
             dev.Open();
-            var rawCapture = dev.GetNextPacket();
+            PacketCapture c;
+            dev.GetNextPacket(out c);
+            var rawCapture = c.GetPacket();
             dev.Close();
 
             var p = Packet.ParsePacket(rawCapture.GetLinkLayers(), rawCapture.Data) as PpiPacket;
@@ -141,7 +144,9 @@ namespace Test.PacketType.Ieee80211
         {
             var dev = new CaptureFileReaderDevice(NUnitSetupClass.CaptureDirectory + "80211_ppi_multiplefields.pcap");
             dev.Open();
-            var rawCapture = dev.GetNextPacket();
+            PacketCapture c;
+            dev.GetNextPacket(out c);
+            var rawCapture = c.GetPacket();
             dev.Close();
 
             var p = Packet.ParsePacket(rawCapture.GetLinkLayers(), rawCapture.Data) as PpiPacket;
@@ -158,7 +163,9 @@ namespace Test.PacketType.Ieee80211
         {
             var dev = new CaptureFileReaderDevice(NUnitSetupClass.CaptureDirectory + "80211_per_packet_information.pcap");
             dev.Open();
-            var rawCapture = dev.GetNextPacket();
+            PacketCapture c;
+            dev.GetNextPacket(out c);
+            var rawCapture = c.GetPacket();
             dev.Close();
 
             var p = Packet.ParsePacket(rawCapture.GetLinkLayers(), rawCapture.Data) as PpiPacket;
@@ -191,7 +198,9 @@ namespace Test.PacketType.Ieee80211
         {
             var dev = new CaptureFileReaderDevice(NUnitSetupClass.CaptureDirectory + "80211_ppi_fcs_present_and_invalid.pcap");
             dev.Open();
-            var rawCapture = dev.GetNextPacket();
+            PacketCapture c;
+            dev.GetNextPacket(out c);
+            var rawCapture = c.GetPacket();
             dev.Close();
 
             var p = Packet.ParsePacket(rawCapture.GetLinkLayers(), rawCapture.Data) as PpiPacket;
@@ -207,7 +216,9 @@ namespace Test.PacketType.Ieee80211
         {
             var dev = new CaptureFileReaderDevice(NUnitSetupClass.CaptureDirectory + "80211_ppi_without_fcs.pcap");
             dev.Open();
-            var rawCapture = dev.GetNextPacket();
+            PacketCapture c;
+            dev.GetNextPacket(out c);
+            var rawCapture = c.GetPacket();
             dev.Close();
 
             var p = Packet.ParsePacket(rawCapture.GetLinkLayers(), rawCapture.Data) as PpiPacket;
@@ -222,7 +233,9 @@ namespace Test.PacketType.Ieee80211
         {
             var dev = new CaptureFileReaderDevice(NUnitSetupClass.CaptureDirectory + "80211_ppi_fcs_present_and_valid.pcap");
             dev.Open();
-            var rawCapture = dev.GetNextPacket();
+            PacketCapture c;
+            dev.GetNextPacket(out c);
+            var rawCapture = c.GetPacket();
             dev.Close();
 
             var p = Packet.ParsePacket(rawCapture.GetLinkLayers(), rawCapture.Data) as PpiPacket;
@@ -237,7 +250,9 @@ namespace Test.PacketType.Ieee80211
         {
             var dev = new CaptureFileReaderDevice(NUnitSetupClass.CaptureDirectory + "80211_ppi_multiplefields.pcap");
             dev.Open();
-            var rawCapture = dev.GetNextPacket();
+            PacketCapture c;
+            dev.GetNextPacket(out c);
+            var rawCapture = c.GetPacket();
             dev.Close();
 
             var p = Packet.ParsePacket(rawCapture.GetLinkLayers(), rawCapture.Data) as PpiPacket;
@@ -259,7 +274,9 @@ namespace Test.PacketType.Ieee80211
         {
             var dev = new CaptureFileReaderDevice(NUnitSetupClass.CaptureDirectory + "80211_ppi_multiplefields.pcap");
             dev.Open();
-            var rawCapture = dev.GetNextPacket();
+            PacketCapture c;
+            dev.GetNextPacket(out c);
+            var rawCapture = c.GetPacket();
             dev.Close();
 
             var p = Packet.ParsePacket(rawCapture.GetLinkLayers(), rawCapture.Data) as PpiPacket;

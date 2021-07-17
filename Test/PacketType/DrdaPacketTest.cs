@@ -25,12 +25,14 @@ namespace Test.PacketType
                 return;
 
 
-            RawCapture raw;
             var dev = new CaptureFileReaderDevice(NUnitSetupClass.CaptureDirectory + "db2_select.pcap");
             dev.Open();
 
-            while ((raw = dev.GetNextPacket()) != null)
+            PacketCapture c;
+            GetPacketStatus status;
+            while ((status = dev.GetNextPacket(out c)) == GetPacketStatus.PacketRead)
             {
+                var raw = c.GetPacket();
                 var p = Packet.ParsePacket(raw.GetLinkLayers(), raw.Data).Extract<DrdaPacket>();
                 if (p != null)
                 {

@@ -24,8 +24,10 @@ namespace Test.PacketType
             var dev = new SharpPcap.LibPcap.CaptureFileReaderDevice(NUnitSetupClass.CaptureDirectory + "arp_request_response.pcap");
             dev.Open();
             Console.WriteLine("Reading packet data");
-            dev.GetNextPacket();
-            var rawPacket = dev.GetNextPacket();
+            PacketCapture c;
+            dev.GetNextPacket(out c);
+            dev.GetNextPacket(out c);
+            var rawPacket = c.GetPacket();
             dev.Close();
 
             Console.WriteLine("Printing human readable string");

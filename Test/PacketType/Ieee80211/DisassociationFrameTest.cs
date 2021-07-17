@@ -14,6 +14,7 @@ using NUnit.Framework;
 using PacketDotNet;
 using PacketDotNet.Ieee80211;
 using PacketDotNet.Utils;
+using SharpPcap;
 using SharpPcap.LibPcap;
 
 namespace Test.PacketType.Ieee80211
@@ -29,7 +30,9 @@ namespace Test.PacketType.Ieee80211
         {
             var dev = new CaptureFileReaderDevice(NUnitSetupClass.CaptureDirectory + "80211_disassociation_frame.pcap");
             dev.Open();
-            var rawCapture = dev.GetNextPacket();
+            PacketCapture c;
+            dev.GetNextPacket(out c);
+            var rawCapture = c.GetPacket();
             dev.Close();
 
             var p = Packet.ParsePacket(rawCapture.GetLinkLayers(), rawCapture.Data);

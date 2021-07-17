@@ -9,6 +9,7 @@ file, You can obtain one at https://mozilla.org/MPL/2.0/.
 using System;
 using NUnit.Framework;
 using PacketDotNet;
+using SharpPcap;
 using SharpPcap.LibPcap;
 
 namespace Test.PacketType
@@ -23,8 +24,10 @@ namespace Test.PacketType
             var dev = new CaptureFileReaderDevice(NUnitSetupClass.CaptureDirectory + "PPPoEPPP.pcap");
             dev.Open();
             Console.WriteLine("Reading packet data");
-            dev.GetNextPacket();
-            var rawCapture = dev.GetNextPacket();
+            PacketCapture c;
+            dev.GetNextPacket(out c);
+            dev.GetNextPacket(out c);
+            var rawCapture = c.GetPacket();
             dev.Close();
             var p = Packet.ParsePacket(rawCapture.GetLinkLayers(), rawCapture.Data);
 
@@ -42,8 +45,10 @@ namespace Test.PacketType
             var dev = new CaptureFileReaderDevice(NUnitSetupClass.CaptureDirectory + "PPPoEPPP.pcap");
             dev.Open();
             Console.WriteLine("Reading packet data");
-            dev.GetNextPacket();
-            var rawCapture = dev.GetNextPacket();
+            PacketCapture c;
+            dev.GetNextPacket(out c);
+            dev.GetNextPacket(out c);
+            var rawCapture = c.GetPacket();
             dev.Close();
             var p = Packet.ParsePacket(rawCapture.GetLinkLayers(), rawCapture.Data);
 
@@ -61,13 +66,16 @@ namespace Test.PacketType
             dev.Open();
 
             // first packet is a udp packet
-            var rawCapture = dev.GetNextPacket();
+            PacketCapture c;
+            dev.GetNextPacket(out c);
+            var rawCapture = c.GetPacket();
             var packet = Packet.ParsePacket(rawCapture.GetLinkLayers(), rawCapture.Data);
             var udpPacket = packet.Extract<UdpPacket>();
             Assert.IsNotNull(udpPacket, "Expected a valid udp packet for the first packet");
 
             // second packet is the PPPoe Ptp packet
-            rawCapture = dev.GetNextPacket();
+            dev.GetNextPacket(out c);
+            rawCapture = c.GetPacket();
             packet = Packet.ParsePacket(rawCapture.GetLinkLayers(), rawCapture.Data);
             var anotherUdpPacket = packet.Extract<UdpPacket>();
             Assert.IsNotNull(anotherUdpPacket, "Expected a valid udp packet for the second packet as well");

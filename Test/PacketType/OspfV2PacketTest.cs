@@ -19,13 +19,15 @@ namespace Test.PacketType
                 return;
 
 
-            RawCapture raw;
+            PacketCapture c;
+            GetPacketStatus status;
             var packetIndex = 0;
             var dev = new CaptureFileReaderDevice(NUnitSetupClass.CaptureDirectory + "ospfv2.pcap");
             dev.Open();
 
-            while ((raw = dev.GetNextPacket()) != null)
+            while ((status = dev.GetNextPacket(out c)) == GetPacketStatus.PacketRead)
             {
+                var raw = c.GetPacket();
                 var p = Packet.ParsePacket(raw.GetLinkLayers(), raw.Data).Extract<OspfV2Packet>();
 
                 switch (packetIndex)
@@ -1222,14 +1224,16 @@ namespace Test.PacketType
         [Test]
         public void TestOspfv2Auth()
         {
-            RawCapture raw;
+            PacketCapture c;
+            GetPacketStatus status;
             var dev = new CaptureFileReaderDevice(NUnitSetupClass.CaptureDirectory + "ospfv2_md5.pcap");
             var testSubjects = new OspfV2HelloPacket[4];
             var i = 0;
 
             dev.Open();
-            while ((raw = dev.GetNextPacket()) != null && i < 4)
+            while ((status = dev.GetNextPacket(out c)) == GetPacketStatus.PacketRead && i < 4)
             {
+                var raw = c.GetPacket();
                 testSubjects[i] = Packet.ParsePacket(raw.GetLinkLayers(), raw.Data).Extract<OspfV2HelloPacket>();
                 i++;
             }

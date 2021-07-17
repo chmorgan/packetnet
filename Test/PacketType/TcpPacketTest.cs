@@ -29,7 +29,9 @@ namespace Test.PacketType
             var dev = new CaptureFileReaderDevice(NUnitSetupClass.CaptureDirectory + "tcp_with_extra_bytes.pcap");
             dev.Open();
 
-            var rawCapture = dev.GetNextPacket();
+            PacketCapture c;
+            dev.GetNextPacket(out c);
+            var rawCapture = c.GetPacket();
             var p = Packet.ParsePacket(rawCapture.GetLinkLayers(), rawCapture.Data);
 
             Assert.IsNotNull(p);
@@ -53,7 +55,9 @@ namespace Test.PacketType
             var dev = new CaptureFileReaderDevice(NUnitSetupClass.CaptureDirectory + "tcp.pcap");
             dev.Open();
 
-            var rawCapture = dev.GetNextPacket();
+            PacketCapture c;
+            dev.GetNextPacket(out c);
+            var rawCapture = c.GetPacket();
             var p = Packet.ParsePacket(rawCapture.GetLinkLayers(), rawCapture.Data);
 
             Assert.IsNotNull(p);
@@ -102,7 +106,9 @@ namespace Test.PacketType
             var dev = new CaptureFileReaderDevice(NUnitSetupClass.CaptureDirectory + "tcp.pcap");
             dev.Open();
             Console.WriteLine("Reading packet data");
-            var rawCapture = dev.GetNextPacket();
+            PacketCapture c;
+            dev.GetNextPacket(out c);
+            var rawCapture = c.GetPacket();
             var p = Packet.ParsePacket(rawCapture.GetLinkLayers(), rawCapture.Data);
 
             Console.WriteLine("Parsing");
@@ -119,7 +125,9 @@ namespace Test.PacketType
             var dev = new CaptureFileReaderDevice(NUnitSetupClass.CaptureDirectory + "tcp.pcap");
             dev.Open();
             Console.WriteLine("Reading packet data");
-            var rawCapture = dev.GetNextPacket();
+            PacketCapture c;
+            dev.GetNextPacket(out c);
+            var rawCapture = c.GetPacket();
             var p = Packet.ParsePacket(rawCapture.GetLinkLayers(), rawCapture.Data);
 
             Console.WriteLine("Parsing");
@@ -152,7 +160,9 @@ namespace Test.PacketType
             var dev = new CaptureFileReaderDevice(NUnitSetupClass.CaptureDirectory + "tcp.pcap");
             dev.Open();
 
-            var rawCapture = dev.GetNextPacket();
+            PacketCapture c;
+            dev.GetNextPacket(out c);
+            var rawCapture = c.GetPacket();
             var p = Packet.ParsePacket(rawCapture.GetLinkLayers(), rawCapture.Data);
 
             Assert.IsNotNull(p);
@@ -208,7 +218,9 @@ namespace Test.PacketType
             var dev = new CaptureFileReaderDevice(NUnitSetupClass.CaptureDirectory + "ipv4_tso_frame.pcap");
             dev.Open();
 
-            var rawCapture = dev.GetNextPacket();
+            PacketCapture c;
+            dev.GetNextPacket(out c);
+            var rawCapture = c.GetPacket();
             var p = Packet.ParsePacket(rawCapture.GetLinkLayers(), rawCapture.Data);
 
             Assert.IsNotNull(p);

@@ -84,10 +84,12 @@ namespace Test.PacketType
             var dev = new CaptureFileReaderDevice(NUnitSetupClass.CaptureDirectory + "arp_request_response.pcap");
             dev.Open();
 
-            RawCapture rawCapture;
+            PacketCapture c;
+            GetPacketStatus status;
             var packetIndex = 0;
-            while ((rawCapture = dev.GetNextPacket()) != null)
+            while ((status = dev.GetNextPacket(out c)) == GetPacketStatus.PacketRead)
             {
+                var rawCapture = c.GetPacket();
                 var p = Packet.ParsePacket(rawCapture.GetLinkLayers(), rawCapture.Data);
 
                 Console.WriteLine("got packet");
@@ -124,7 +126,9 @@ namespace Test.PacketType
             var dev = new CaptureFileReaderDevice(NUnitSetupClass.CaptureDirectory + "arp_request_response.pcap");
             dev.Open();
             Console.WriteLine("Reading packet data");
-            var rawCapture = dev.GetNextPacket();
+            PacketCapture c;
+            dev.GetNextPacket(out c);
+            var rawCapture = c.GetPacket();
             var p = Packet.ParsePacket(rawCapture.GetLinkLayers(), rawCapture.Data);
 
             Console.WriteLine("Parsing");
@@ -141,7 +145,9 @@ namespace Test.PacketType
             var dev = new CaptureFileReaderDevice(NUnitSetupClass.CaptureDirectory + "arp_request_response.pcap");
             dev.Open();
             Console.WriteLine("Reading packet data");
-            var rawCapture = dev.GetNextPacket();
+            PacketCapture c;
+            dev.GetNextPacket(out c);
+            var rawCapture = c.GetPacket();
             var p = Packet.ParsePacket(rawCapture.GetLinkLayers(), rawCapture.Data);
 
             Console.WriteLine("Parsing");

@@ -66,8 +66,10 @@ namespace Test.PacketType
             Console.WriteLine("Loading the sample capture file");
             var dev = new CaptureFileReaderDevice(NUnitSetupClass.CaptureDirectory + "udp.pcap");
             dev.Open();
+            PacketCapture c;
             Console.WriteLine("Reading packet data");
-            var rawCapture = dev.GetNextPacket();
+            dev.GetNextPacket(out c);
+            var rawCapture = c.GetPacket();
             var p = Packet.ParsePacket(rawCapture.GetLinkLayers(), rawCapture.Data);
 
             Console.WriteLine("Parsing");
@@ -84,7 +86,9 @@ namespace Test.PacketType
             var dev = new CaptureFileReaderDevice(NUnitSetupClass.CaptureDirectory + "udp.pcap");
             dev.Open();
             Console.WriteLine("Reading packet data");
-            var rawCapture = dev.GetNextPacket();
+            PacketCapture c;
+            dev.GetNextPacket(out c);
+            var rawCapture = c.GetPacket();
             var p = Packet.ParsePacket(rawCapture.GetLinkLayers(), rawCapture.Data);
 
             Console.WriteLine("Parsing");
@@ -126,9 +130,11 @@ namespace Test.PacketType
             };
 
             var packetIndex = 0;
-            RawCapture rawCapture;
-            while ((rawCapture = dev.GetNextPacket()) != null)
+            PacketCapture c;
+            GetPacketStatus status;
+            while ((status = dev.GetNextPacket(out c)) == GetPacketStatus.PacketRead)
             {
+                var rawCapture = c.GetPacket();
                 var p = Packet.ParsePacket(rawCapture.GetLinkLayers(), rawCapture.Data);
                 var t = p.Extract<UdpPacket>();
                 Assert.IsNotNull(t, "Expected t to not be null");
@@ -156,7 +162,9 @@ namespace Test.PacketType
             dev.Open();
 
             // check the first packet
-            var rawCapture = dev.GetNextPacket();
+            PacketCapture c;
+            dev.GetNextPacket(out c);
+            var rawCapture = c.GetPacket();
 
             var p = Packet.ParsePacket(rawCapture.GetLinkLayers(), rawCapture.Data);
             Assert.IsNotNull(p);
@@ -168,7 +176,8 @@ namespace Test.PacketType
                             "UDPData.Length mismatch");
 
             // check the second packet
-            rawCapture = dev.GetNextPacket();
+            dev.GetNextPacket(out c);
+            rawCapture = c.GetPacket();
             p = Packet.ParsePacket(rawCapture.GetLinkLayers(), rawCapture.Data);
 
             Assert.IsNotNull(p);
@@ -194,9 +203,11 @@ namespace Test.PacketType
             int[] expectedChecksum = { 0x61fb };
 
             var packetIndex = 0;
-            RawCapture rawCapture;
-            while ((rawCapture = dev.GetNextPacket()) != null)
+            PacketCapture c;
+            GetPacketStatus status;
+            while ((status = dev.GetNextPacket(out c)) == GetPacketStatus.PacketRead)
             {
+                var rawCapture = c.GetPacket();
                 var p = Packet.ParsePacket(rawCapture.GetLinkLayers(), rawCapture.Data);
                 Console.WriteLine("Converted a raw packet to a Packet");
                 Console.WriteLine(p.ToString());

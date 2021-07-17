@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using log4net.Core;
 using NUnit.Framework;
 using PacketDotNet;
+using SharpPcap;
 
 namespace Test.Misc
 {
@@ -179,7 +180,9 @@ namespace Test.Misc
                 Log.Debug("retrieving packet");
 
                 // read the next packet
-                var packet = _captureFileReader.GetNextPacket();
+                PacketCapture c;
+                _captureFileReader.GetNextPacket(out c);
+                var packet = c.GetPacket();
                 Assert.IsNotNull(packet, "Expected a valid packet but it was null");
                 
                 p = Packet.ParsePacket(packet.GetLinkLayers(), packet.Data);
